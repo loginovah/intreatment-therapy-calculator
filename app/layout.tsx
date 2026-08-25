@@ -4,11 +4,11 @@ import "./globals.css";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://intreatment-therapy-calculator.dr-loginovah.chatgpt.site";
 
 export const metadata: Metadata = {
-  title: "Ориентир по длительности терапии",
-  description: "Предварительный ориентир по количеству встреч, длительности терапии и возможному бюджету от InTreatment.",
+  title: "Сколько времени может занять терапия? — калькулятор InTreatment",
+  description: "Получите предварительный ориентир по количеству встреч, длительности, первой контрольной точке и возможному бюджету терапии.",
   openGraph: {
     title: "Сколько времени может занять терапия?",
-    description: "Предварительный ориентир по количеству встреч, сроку и бюджету.",
+    description: "7 вопросов, чтобы получить предварительный ориентир по количеству встреч, сроку, этапам и бюджету.",
     url: siteUrl,
     siteName: "InTreatment",
     locale: "ru_RU",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Сколько времени может занять терапия?",
-    description: "Предварительный ориентир по количеству встреч, сроку и бюджету.",
+    description: "7 вопросов, чтобы получить предварительный ориентир по количеству встреч, сроку, этапам и бюджету.",
     images: [`${siteUrl}/og.jpg`],
   },
   icons: {

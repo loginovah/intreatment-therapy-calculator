@@ -214,6 +214,13 @@ export default function Home() {
     setScreen("intro");
   };
 
+  const openCalculator = () => {
+    setScreen("intro");
+    window.requestAnimationFrame(() => {
+      document.getElementById("calculator")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
+
   const goBack = () => {
     if (screen === "questions" && questionIndex > 0) {
       setQuestionIndex((value) => value - 1);
@@ -267,40 +274,157 @@ export default function Home() {
   return (
     <main className="app-shell">
       <header className="site-header">
-        <button className="wordmark" type="button" onClick={reset} aria-label="На главную">
+        <button className="wordmark" type="button" onClick={() => { reset(); window.scrollTo({ top: 0, behavior: "smooth" }); }} aria-label="На главную">
           InTreatment
         </button>
-        <p>Ориентир по длительности терапии</p>
+        <nav className="header-nav" aria-label="Навигация по странице">
+          <a href="#how-it-works">Как это работает</a>
+          <button type="button" onClick={openCalculator}>Рассчитать</button>
+        </nav>
       </header>
 
-      <div className="workspace">
-        <aside className="context-panel">
-          <div>
-            <p className="kicker">Калькулятор терапии</p>
-            <h1>Сколько времени может занять терапия?</h1>
-            <p className="context-copy">
-              Не точный прогноз, а предварительный маршрут: количество встреч, длительность, первая контрольная точка и возможный бюджет.
+      <div className="landing-content">
+        <section className="landing-hero" aria-labelledby="landing-title">
+          <div className="hero-copy">
+            <p className="kicker">Бесплатный калькулятор InTreatment</p>
+            <h1 id="landing-title">Сколько времени может занять терапия?</h1>
+            <p className="hero-lead">
+              Когда неизвестно, сколько встреч понадобится, трудно решиться даже на первую. Получите предварительный ориентир по длительности, этапам и бюджету — без регистрации и обещаний точной цифры.
             </p>
-          </div>
-
-          {screen === "questions" && (
-            <div className="progress-block" aria-label={`Пройдено ${progress}%`}>
-              <div className="progress-meta">
-                <span>Шаг {currentStep} из {totalSteps}</span>
-                <span>{progress}%</span>
-              </div>
-              <div className="progress-track"><span style={{ width: `${progress}%` }} /></div>
-              <p>Ответы не сохраняются и используются только для расчёта на этом устройстве.</p>
+            <div className="hero-actions">
+              <button className="primary-button" type="button" onClick={openCalculator}>
+                Получить ориентир за 3 минуты <Arrow />
+              </button>
+              <span>7 вопросов · ответы не сохраняются</span>
             </div>
-          )}
-
-          <div className="aside-note">
-            <span className="note-mark">i</span>
-            <p>Результат калькулятора не является диагнозом и может уточниться после первой встречи с психологом.</p>
           </div>
-        </aside>
+          <div className="hero-route" aria-label="Что вы получите">
+            <p className="section-label">На выходе</p>
+            <div className="route-line">
+              <span>01</span>
+              <div><strong>Диапазон встреч</strong><p>Не одна пугающая цифра, а реалистичный коридор.</p></div>
+            </div>
+            <div className="route-line">
+              <span>02</span>
+              <div><strong>Первая контрольная точка</strong><p>Когда стоит остановиться и сверить изменения.</p></div>
+            </div>
+            <div className="route-line">
+              <span>03</span>
+              <div><strong>Срок и бюджет</strong><p>С учётом ритма и комфортной цены одной встречи.</p></div>
+            </div>
+          </div>
+        </section>
 
-        <section className="calculator-card" aria-live="polite">
+        <section className="uncertainty-section" aria-labelledby="uncertainty-title">
+          <div className="section-heading">
+            <p className="section-label">Почему мы откладываем</p>
+            <h2 id="uncertainty-title">Неизвестность тоже отнимает силы</h2>
+            <p>Психотерапия часто выглядит как маршрут без карты: непонятно, сколько он займёт, во что обойдётся и когда станет ясно, что работа помогает.</p>
+          </div>
+          <div className="inner-voice-grid">
+            <article>
+              <span>Думает</span>
+              <strong>«А вдруг это на годы?»</strong>
+              <p>«Сколько денег закладывать?», «Можно ли решить это быстрее?», «Как понять, что есть результат?»</p>
+            </article>
+            <article>
+              <span>Чувствует</span>
+              <strong>Тревогу и потерю контроля</strong>
+              <p>К сомнениям о самой терапии добавляются страх затрат, недоверие и неловкость от того, что нельзя заранее получить точный ответ.</p>
+            </article>
+            <article>
+              <span>Делает</span>
+              <strong>Откладывает или бросает раньше</strong>
+              <p>Выбирает только по цене, ждёт мгновенного эффекта или остаётся в работе без понятных точек сверки.</p>
+            </article>
+          </div>
+        </section>
+
+        <section className="depth-section" id="how-it-works" aria-labelledby="depth-title">
+          <div className="section-heading compact-heading">
+            <p className="section-label">От чего зависит срок</p>
+            <h2 id="depth-title">Одинаковая жалоба — не всегда одинаковая глубина работы</h2>
+          </div>
+          <div className="depth-layout">
+            <div className="depth-scale" aria-label="Уровни возможной работы">
+              <article className="depth-card depth-one">
+                <span>01 · Ситуация</span>
+                <h3>Увидеть варианты</h3>
+                <p>Разобраться в одном разговоре, решении или недавно возникшей трудности.</p>
+              </article>
+              <article className="depth-card depth-two">
+                <span>02 · Повторяющийся сценарий</span>
+                <h3>Изменить привычный способ</h3>
+                <p>Понять, почему ситуация возвращается, и попробовать новые способы думать, чувствовать и действовать.</p>
+              </article>
+              <article className="depth-card depth-three">
+                <span>03 · Системные изменения</span>
+                <h3>Вырастить новые опоры</h3>
+                <p>Работать с тем, что существует давно, переплетает несколько сфер жизни и требует устойчивых изменений.</p>
+              </article>
+            </div>
+            <div className="factor-list">
+              <p className="section-label">Калькулятор учитывает</p>
+              <ol>
+                <li><span>01</span><p><strong>Желаемый результат</strong> — облегчение, решение конкретной задачи или глубокие изменения.</p></li>
+                <li><span>02</span><p><strong>Давность и широту трудности</strong> — возникла недавно или давно влияет на разные сферы.</p></li>
+                <li><span>03</span><p><strong>Влияние на повседневность</strong> — насколько трудно сохранять привычную жизнь и восстанавливаться.</p></li>
+                <li><span>04</span><p><strong>Связанность тем</strong> — одна ли это ясная задача или несколько переплетённых трудностей.</p></li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <section className="value-section" aria-labelledby="value-title">
+          <div className="value-quote">
+            <p>Понимание срока не связывает вас обязательством. Оно помогает войти в терапию не вслепую.</p>
+          </div>
+          <div>
+            <p className="section-label">Зачем нужен ориентир</p>
+            <h2 id="value-title">Чтобы планировать и обсуждать терапию на равных</h2>
+            <ul className="value-list">
+              <li><span>✓</span>Сопоставить возможный маршрут со своим временем и бюджетом.</li>
+              <li><span>✓</span>Сформулировать психологу, какого результата вы ждёте.</li>
+              <li><span>✓</span>Заранее договориться о первой точке сверки динамики.</li>
+              <li><span>✓</span>Помнить: облегчение может появиться раньше, чем завершится вся работа.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section className="calculator-section" id="calculator" aria-labelledby="calculator-title">
+          <div className="calculator-heading">
+            <p className="section-label">Ваш предварительный маршрут</p>
+            <h2 id="calculator-title">Получите персональный ориентир</h2>
+            <p>Ответьте на семь вопросов. Калькулятор покажет возможное количество встреч, календарный срок, контрольную точку и бюджет.</p>
+          </div>
+          <div className="workspace">
+            <aside className="context-panel">
+              <div>
+                <p className="kicker">Калькулятор терапии</p>
+                <h2>От открытого вопроса — к понятному маршруту</h2>
+                <p className="context-copy">
+                  Не точный прогноз, а предварительный ориентир, который можно обсудить и уточнить с психологом.
+                </p>
+              </div>
+
+              {screen === "questions" && (
+                <div className="progress-block" aria-label={`Пройдено ${progress}%`}>
+                  <div className="progress-meta">
+                    <span>Шаг {currentStep} из {totalSteps}</span>
+                    <span>{progress}%</span>
+                  </div>
+                  <div className="progress-track"><span style={{ width: `${progress}%` }} /></div>
+                  <p>Ответы не сохраняются и используются только для расчёта на этом устройстве.</p>
+                </div>
+              )}
+
+              <div className="aside-note">
+                <span className="note-mark">i</span>
+                <p>Результат калькулятора не является диагнозом и может уточниться после первой встречи с психологом.</p>
+              </div>
+            </aside>
+
+            <section className="calculator-card" aria-live="polite">
           {screen === "intro" && (
             <div className="intro-screen screen-enter">
               <p className="section-label">Предварительная оценка</p>
@@ -475,12 +599,46 @@ export default function Home() {
               <p className="result-disclaimer">Это ориентир, а не назначение курса терапии. Количество встреч может измениться после знакомства с психологом и по мере появления реальных результатов.</p>
             </div>
           )}
+            </section>
+          </div>
+        </section>
+
+        <section className="ethics-section" aria-labelledby="ethics-title">
+          <div>
+            <p className="section-label">Важно</p>
+            <h2 id="ethics-title">Ориентир, а не назначение курса</h2>
+          </div>
+          <div className="ethics-copy">
+            <p>Психотерапия нелинейна. Один человек приходит с локальной ситуацией, другой — с похожей жалобой, за которой стоит давний повторяющийся сценарий. Поэтому честная оценка всегда выглядит как диапазон.</p>
+            <p>Количество встреч может измениться после знакомства с психологом и по мере появления реальной динамики. Важно не ждать финала молча, а регулярно обсуждать, что уже изменилось, где вы сейчас и куда движется работа.</p>
+          </div>
+        </section>
+
+        <section className="faq-section" aria-labelledby="faq-title">
+          <div className="section-heading compact-heading">
+            <p className="section-label">Коротко о главном</p>
+            <h2 id="faq-title">Частые вопросы</h2>
+          </div>
+          <div className="faq-list">
+            <details><summary>Может ли помочь одна консультация?</summary><p>Да, если задача локальная: принять решение, подготовиться к разговору или увидеть новые варианты. Но иногда впервые возникший симптом оказывается верхушкой более давнего напряжения.</p></details>
+            <details><summary>Почему калькулятор показывает диапазон?</summary><p>На длительность влияют не только сама жалоба, но и её давность, влияние на разные сферы жизни, желаемая глубина изменений, темп работы и контакт с психологом.</p></details>
+            <details><summary>Если получился длинный маршрут, облегчение будет нескоро?</summary><p>Не обязательно. Изменения состояния, оценки ситуации или поведения могут начаться уже после первых встреч. Длиннее может быть путь к устойчивому закреплению этих изменений.</p></details>
+            <details><summary>Как использовать результат?</summary><p>Сохраните его и обсудите на первой встрече: совпадает ли оценка психолога, какая цель будет у первого этапа и после какой встречи вы вместе проверите динамику.</p></details>
+          </div>
+        </section>
+
+        <section className="final-cta">
+          <p className="section-label">Первый шаг</p>
+          <h2>Не нужно заранее знать весь путь. Достаточно увидеть его первый отрезок.</h2>
+          <button className="primary-button" type="button" onClick={openCalculator}>
+            Рассчитать длительность терапии <Arrow />
+          </button>
         </section>
       </div>
 
       <footer>
         <span>InTreatment</span>
-        <p>Соединяем с психологом, который подходит именно вам.</p>
+        <p>Соединяем с психологом, который подходит именно вам · <a href="https://intreatment.online/" target="_blank" rel="noreferrer">intreatment.online</a></p>
       </footer>
     </main>
   );
