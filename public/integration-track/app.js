@@ -3,6 +3,8 @@ const menuButton = document.querySelector('[data-menu-button]');
 const menu = document.querySelector('[data-menu]');
 const routeSteps = [...document.querySelectorAll('.route-step')];
 const navLinks = [...document.querySelectorAll('.site-nav a')];
+const videoPlayer = document.querySelector('[data-video-player]');
+const videoPlayButton = document.querySelector('[data-video-play]');
 
 const closeMenu = () => {
   if (!menuButton || !menu) return;
@@ -71,3 +73,16 @@ const routeObserver = new IntersectionObserver(entries => {
 });
 
 routeSteps.forEach(step => routeObserver.observe(step));
+
+videoPlayButton?.addEventListener('click', () => {
+  const iframe = document.createElement('iframe');
+  iframe.src = 'https://www.youtube.com/embed/L8S9t-8HeW8?autoplay=1&playsinline=1&rel=0';
+  iframe.title = 'Разговор с Инной о совместности и профессиональной среде';
+  iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+  iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+  iframe.allowFullscreen = true;
+
+  videoPlayer?.replaceChildren(iframe);
+  videoPlayer?.classList.add('is-playing');
+  iframe.focus();
+}, { once: true });
