@@ -1,27 +1,73 @@
 const header = document.querySelector('[data-header]');
-const steps = [...document.querySelectorAll('.route-step')];
-const navLinks = [...document.querySelectorAll('.nav a')];
+const menuButton = document.querySelector('[data-menu-button]');
+const menu = document.querySelector('[data-menu]');
+const routeSteps = [...document.querySelectorAll('.route-step')];
+const navLinks = [...document.querySelectorAll('.site-nav a')];
 
-window.addEventListener('scroll', () => {
-  header?.classList.toggle('is-scrolled', window.scrollY > 16);
+const closeMenu = () => {
+  if (!menuButton || !menu) return;
+  menuButton.setAttribute('aria-expanded', 'false');
+  menu.classList.remove('is-open');
+  document.body.classList.remove('menu-open');
+};
+
+menuButton?.addEventListener('click', () => {
+  const willOpen = menuButton.getAttribute('aria-expanded') !== 'true';
+  menuButton.setAttribute('aria-expanded', String(willOpen));
+  menu?.classList.toggle('is-open', willOpen);
+  document.body.classList.toggle('menu-open', willOpen);
+});
+
+navLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 820) closeMenu();
 }, { passive: true });
 
+const updateHeader = () => {
+  header?.classList.toggle('is-scrolled', window.scrollY > 8);
+};
+
+updateHeader();
+window.addEventListener('scroll', updateHeader, { passive: true });
+
 document.querySelector('[data-expand]')?.addEventListener('click', () => {
-  steps.forEach(step => { step.open = true; });
+  routeSteps.forEach(step => {
+    step.open = true;
+  });
 });
 
 document.querySelector('[data-collapse]')?.addEventListener('click', () => {
-  steps.forEach(step => { step.open = false; });
+  routeSteps.forEach(step => {
+    step.open = false;
+  });
 });
 
 const sectionObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (!entry.isIntersecting) return;
-    navLinks.forEach(link => link.classList.toggle('active', link.hash === `#${entry.target.id}`));
+    const activeId = entry.target.id;
+    navLinks.forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === `#${activeId}`);
+    });
   });
-}, { rootMargin: '-30% 0px -62%', threshold: 0 });
-
-['why', 'work', 'route', 'results', 'format'].forEach(id => {
-  const section = document.getElementById(id);
-  if (section) sectionObserver.observe(section);
+}, {
+  rootMargin: '-34% 0px -58% 0px',
+  threshold: 0
 });
+
+navLinks.forEach(link => {
+  const target = document.querySelector(link.getAttribute('href'));
+  if (target) sectionObserver.observe(target);
+});
+
+const routeObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('is-current');
+  });
+}, {
+  rootMargin: '-20% 0px -55% 0px',
+  threshold: 0.1
+});
+
+routeSteps.forEach(step => routeObserver.observe(step));
